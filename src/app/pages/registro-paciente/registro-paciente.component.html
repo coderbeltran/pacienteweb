@@ -1,0 +1,485 @@
+<div class="container p-5">
+  <h3>Datos del paciente</h3>
+  <form
+    ngNativeValidate
+    (ngSubmit)="registrarPaciente()"
+    class="form-horizontal form-material"
+  >
+    <div class="card">
+      <h5 class="card-header">Datos del Paciente</h5>
+      <div class="card-body">
+        <div class="container" [formGroup]="formPaciente">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="tipo_documento">Tipo de documento:</label>
+                <select
+                  class="form-control"
+                  name="tipoDocumento"
+                  id="tipo_documento"
+                  formControlName="tipoDocumento"
+                  required
+                >
+                  <option value="">Seleccione un tipo de documento</option>
+                  <option
+                    [value]="tipos.idTipoDocumentoIdentidad"
+                    *ngFor="let tipos of tipodocumentos"
+                  >
+                    {{ tipos.codigoIeds }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="numero_documento">Número de documento:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="documento"
+                  id="numero_documento"
+                  formControlName="documento"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="apellido_paterno">Apellido paterno:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="apellidoPat"
+                  id="apellido_paterno"
+                  formControlName="apellidoPat"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="apellido_materno">Apellido materno:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="apellidoMat"
+                  id="apellido_materno"
+                  formControlName="apellidoMat"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="nombres">Nombres:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="noNombres"
+                  id="nombres"
+                  formControlName="nombres"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select
+                  class="form-control"
+                  name="idSexo"
+                  id="sexo"
+                  formControlName="idSexo"
+                  required
+                >
+                  <option value="">Seleccione un sexo</option>
+                  <option [value]="sexo.idSexo" *ngFor="let sexo of sexo">
+                    {{ sexo.descripcionSexo }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="fechaNacimiento"
+                  id="fecha_nacimiento"
+                  formControlName="fechaNacimiento"
+                  (change)="calcularEdad($event, 'edadPaciente')"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="edad"
+                  id="edad"
+                  [value]="edades.paciente"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label for="lugar_nacimiento">Lugar de nacimiento:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="lugarNacimiento"
+                  id="lugar_nacimiento"
+                  formControlName="lugarNacimiento"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="direccion"
+                  id="direccion"
+                  formControlName="direccion"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="departamento">Departamento:</label>
+                  <select
+                    class="form-control"
+                    name="departamento"
+                    id="departamento"
+                    formControlName="departamento"
+                    (change)="seleccionarProvinciaPaciente()"
+                    required
+                  >
+                    <option value="">Seleccione un departamento</option>
+                    <option
+                      [value]="departamento.id"
+                      *ngFor="let departamento of departamentos"
+                    >
+                      {{ departamento.nombre }}
+                    </option>
+                    <!-- Agregar opciones de departamentos -->
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="provincia">Provincia:</label>
+                  <select
+                    class="form-control"
+                    name="provincia"
+                    id="provincia"
+                    formControlName="provincia"
+                    (change)="seleccionarDistritoPaciente()"
+                    required
+                  >
+                    <option value="">Seleccione una provincia</option>
+                    <option
+                      [value]="provincia.id"
+                      *ngFor="let provincia of provinciasPaciente"
+                    >
+                      {{ provincia.nombre }}
+                    </option>
+                    <!-- Agregar opciones de provincias -->
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="distrito">Distrito:</label>
+                  <select
+                    class="form-control"
+                    name="distrito"
+                    id="distrito"
+                    formControlName="distrito"
+                    required
+                  >
+                    <option value="">Seleccione un distrito</option>
+                    <option
+                      [value]="distrito.ubigeo"
+                      *ngFor="let distrito of distritosPaciente"
+                    >
+                      {{ distrito.nombre }}
+                    </option>
+                    <!-- Agregar opciones de distritos -->
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="card">
+      <h5 class="card-header">Datos del Acompañante</h5>
+      <div class="card-body">
+        <div class="container" [formGroup]="formAcompanante">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="tipo_documento">Tipo de documento:</label>
+                <select
+                  class="form-control"
+                  name="tipoDocumento"
+                  id="    tipoDocumento: number,
+"
+                  formControlName="tipoDocumento"
+                >
+                  <option value="">Seleccione un tipo de documento</option>
+                  <option
+                    [value]="tipos.idTipoDocumentoIdentidad"
+                    *ngFor="let tipos of tipodocumentos"
+                  >
+                    {{ tipos.codigoIeds }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="numero_documento">Número de documento:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="documento"
+                  id="numero_documento"
+                  formControlName="documento"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="apellido_paterno">Apellido paterno:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="apellidoPat"
+                  id="apellido_paterno"
+                  formControlName="apellidoPat"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="apellido_materno">Apellido materno:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="apellidoMat"
+                  id="apellido_materno"
+                  formControlName="apellidoMat"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="nombres">Nombres:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="nombres"
+                  id="nombres"
+                  formControlName="nombres"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="fechaNacimiento"
+                  id="fecha_nacimiento"
+                  formControlName="fechaNacimiento"
+                  (change)="calcularEdad($event, 'edadAcompanate')"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="edad"
+                  id="edad"
+                  disabled
+                  [value]="edades.acompanate"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="parentesco">Parentesco:</label>
+                <select
+                  class="form-control"
+                  name="idParentesco"
+                  id="parentesco"
+                  formControlName="idParentesco"
+                >
+                  <option value="">Seleccione</option>
+                  <option
+                    [value]="parentesco.idParentesco"
+                    *ngFor="let parentesco of listaParentescos"
+                  >
+                    {{ parentesco.nombreParentesco }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="telefono_contacto">Telefono de contacto:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="telefono"
+                  id="telefono_contacto"
+                  formControlName="telefono"
+                />
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="direccion"
+                  id="direccion"
+                  formControlName="direccion"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="departamento">Departamento:</label>
+                <select
+                  class="form-control"
+                  name="departamento"
+                  id="departamento"
+                  formControlName="departamento"
+                  (change)="seleccionarProvinciaAcompanante()"
+                >
+                  <option value="">Seleccione un departamento</option>
+                  <option
+                    [value]="departamento.id"
+                    *ngFor="let departamento of departamentos"
+                  >
+                    {{ departamento.nombre }}
+                  </option>
+                  <!-- Agregar opciones de departamentos -->
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="provincia">Provincia:</label>
+                <select
+                  class="form-control"
+                  name="provincia"
+                  id="provincia"
+                  formControlName="provincia"
+                  (change)="seleccionarDistritoAcompanante()"
+                >
+                  <option value="">Seleccione una provincia</option>
+                  <option
+                    [value]="provincia.id"
+                    *ngFor="let provincia of provinciasAcompanante"
+                  >
+                    {{ provincia.nombre }}
+                  </option>
+                  <!-- Agregar opciones de provincias -->
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="distrito">Distrito:</label>
+                <select
+                  class="form-control"
+                  name="ubigeo"
+                  id="ubigeo"
+                  formControlName="ubigeo"
+                >
+                  <option value="">Seleccione un distrito</option>
+                  <option
+                    [value]="distrito.ubigeo"
+                    *ngFor="let distrito of distritosAcompanante"
+                  >
+                    {{ distrito.nombre }}
+                  </option>
+                  <!-- Agregar opciones de distritos -->
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div
+        class="alert alert-danger mt-4"
+        role="alert"
+        *ngIf="!registroExitoso"
+      >
+        Error al registrar paciente, complete todos los campos requeridos
+      </div>
+      <div
+        class="alert alert-success mt-4"
+        role="alert"
+        *ngIf="accionBoton.registrado"
+      >
+        Paciente {{ accionBoton.mensaje }} correctamente...
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12 text-right">
+          <!-- Cambio aquí -->
+          <button
+            class="btn btn-primary btn-lg me-4"
+            type="button"
+            type="submit"
+            [disabled]="accionBoton.deshabilitado"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg"
+            [routerLink]="'/listarPaciente'"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

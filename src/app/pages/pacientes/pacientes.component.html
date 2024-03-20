@@ -1,0 +1,159 @@
+<div class="container">
+  <section>
+    <div class="login-box card">
+      <div class="card-body">
+        <form
+          ngNativeValidate
+          [formGroup]="forma"
+          (ngSubmit)="listarPaciente()"
+          class="form-horizontal form-material"
+          id="loginform"
+          action="index.html"
+        >
+          <h3 class="box-title m-t-40 m-b-0">Lista de Pacientes</h3>
+          <div class="row">
+            <div class="col-xs-12 col-md-3">
+              <div class="form-group m-t-20">
+                <select
+                  class="form-control"
+                  name="tipoDoc"
+                  formControlName="tipoDoc"
+                  readonly
+                >
+                  <option value="">Seleccionar</option>
+                  <option
+                    [value]="tipos.idTipoDocumentoIdentidad"
+                    *ngFor="let tipos of tipodocumentos"
+                  >
+                    {{ tipos.codigoIeds }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+              <div class="form-group m-t-20">
+                <input
+                  class="form-control"
+                  formControlName="numDoc"
+                  name="numDoc"
+                  type="text"
+                  placeholder="Numero documento"
+                />
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+              <div class="form-group">
+                <input
+                  class="form-control"
+                  formControlName="nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Nombre"
+                />
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+              <div class="form-group">
+                <input
+                  class="form-control"
+                  formControlName="apellido"
+                  name="apellido"
+                  type="text"
+                  placeholder="Apellidos"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="padding: 10px 0">
+            <div class="col-4">
+              <button
+                class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
+                type="submit"
+                style="margin-right: 10px"
+              >
+                Buscar
+              </button>
+              <button
+                type="button"
+                class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
+                (click)="onCancel()"
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <hr />
+
+  <div class="container">
+    <div class="d-flex flex-row-reverse">
+      <button
+        type="button"
+        class="btn btn-link"
+        [routerLink]="'/registrarPaciente'"
+      >
+        Registrar paciente
+      </button>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Apellido Paterno</th>
+          <th>Apellido Materno</th>
+          <th>Nombres</th>
+          <th>Tipo de Documento</th>
+          <th>Número de Documento</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Lugar de Nacimiento</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paciente of pacientes">
+          <td>{{ paciente.noApepat }}</td>
+          <td>{{ paciente.noApemat }}</td>
+          <td>{{ paciente.noNombres }}</td>
+          <td>{{ paciente.idTipoDocide }}</td>
+          <td>{{ paciente.noDocide }}</td>
+          <td>{{ paciente.feNacimiento }}</td>
+          <td>{{ paciente.noLugarNacimiento }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              [routerLink]="'/registrarPaciente/' + paciente.idPaciente"
+            >
+              <i class="fas fa-trash-alt"></i> Editar
+            </button>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              (click)="eliminarPaciente(paciente.idPaciente)"
+            >
+              <i class="fas fa-edit"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+        <tr *ngFor="let paciente of pacientes"></tr>
+        <tr *ngIf="noHayRegistros">
+          <td
+            class="container-fluid"
+            style="background-color: #e28888; color: #fff"
+            colspan="9"
+          >
+            No se encontraron pacientes.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
